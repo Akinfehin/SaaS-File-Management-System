@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <?php
@@ -28,7 +27,8 @@ if(!isset($_SESSION["email_address"])){
     <script type="text/javascript" charset="utf-8">
         $(document).ready(function() {
             $.fn.dataTable.ext.errMode = 'none';
-            $('#tableko').dataTable({
+            $('#dtable').dataTable({
+
                 "aLengthMenu": [
                     [5, 10, 15, 25, 50, 100, -1],
                     [5, 10, 15, 25, 50, 100, "All"]
@@ -37,7 +37,6 @@ if(!isset($_SESSION["email_address"])){
             });
         })
     </script>
-
 
     <style>
         ul {
@@ -123,6 +122,9 @@ if(!isset($_SESSION["email_address"])){
             border-left-color: #afab9d;
         }
 
+
+
+
         select[multiple],
         select[size] {
             height: auto;
@@ -186,26 +188,26 @@ if(!isset($_SESSION["email_address"])){
 <body style="padding:0px; margin:0px; background-color:#fff;font-family:arial,helvetica,sans-serif,verdana,'Open Sans'">
     <?php 
 
-       require_once("_Assets/include/connection.php");
+     require_once("_Assets/include/connection.php");
 
      $id = $conn->real_escape_string($_SESSION['email_address']);
 
 
-      $r = $conn->query("SELECT * FROM login_user where id = '$id'") or die (mysqli_error($con));
+      $r = $conn->query("SELECT * FROM login_user where email_address = '$id'") or die (mysqli_error($con));
 
-       $row = $r->fetch_array();
+      $row = $r->fetch_array();
 
-       $image=htmlentities($row['user_profile']);
-       $id=htmlentities($row['email_address']);
-       $x=htmlentities($row['id']);
-       $namex=htmlentities($row['name']);
-       $userposition=htmlentities($row['user_position']);
-       $user_contact=htmlentities($row['user_contact']);
-       $user_address=htmlentities($row['user_address']);
-  ?>
+   
+   $image="../".htmlentities($row['user_profile']);
+   $id=htmlentities($row['email_address']);
+   $namex=htmlentities($row['name']);
+   $userposition=htmlentities($row['user_position']);
+   $user_contact=htmlentities($row['user_contact']);
+   $user_address=htmlentities($row['user_address']);
+?>
 
     <nav class="mb-1 navbar navbar-expand-lg navbar-dark default-color fixed-top">
-        <a class="navbar-brand" href="home.php"><img src="_Assets/js/img/Files_Download.png" width="33px" height="33px">
+        <a class="navbar-brand" href="#"><img src="_Assets/js/img/Files_Download.png" width="33px" height="33px">
             <font color="#F0B56F">F</font>ile <font color="#F0B56F">M</font>anagement <font color="#F0B56F">S</font>ystem
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-4" aria-controls="navbarSupportedContent-4" aria-expanded="false" aria-label="Toggle navigation">
@@ -229,95 +231,57 @@ if(!isset($_SESSION["email_address"])){
     <br>
     <div id="loader"></div>
     <br><Br><br>
+
     <div class="container">
         <div class="row">
             <div class="col-md-9">
                 <div class="">
                     <a href="add_file.php"><button type="button" class="btn btn-success"><i class="fas fa-file-medical"></i> Add File</button></a>
                     <a href="add_folder.php"><button type="button" class="btn btn-warning"><i class="fas fa-folder-plus"></i> Add Folder</button></a>
-            <!--         <a href="view_archive.php"><img src="_Assets/img/user-trash-full-128.png" class="imgs" width="40px" height="40px" title="View Archive" style="float: right;"></a> -->
+                 <!--    <a href="view_archive.php"><img src="_Assets/img/user-trash-full-128.png" class="imgs" width="40px" height="40px" title="View Archive" style="float: right;"></a> -->
                 </div>
-     
-                <div class="tab-content" id="myTabContent">
-                    <!---main file-->
-                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                        <hr>
-
-                        <table id="tableko" class="table table-striped" style="">
-                            <thead>
-                                <th>Filename</th>
-                                <th>FileSize</th>
-                                <th>Uploader</th>
-                                <th>Status</th>
-                                <th>Date/Time Upload</th>
-                                <th>Admin Comment</th>
-                                <th>Action</th>
-                            </thead>
-                            <tbody>
-                                <tr>
-
-                                 <?php 
-                                  error_reporting(0);
-                                   require_once("_Assets/include/connection.php");
-                                    $getID = $conn->real_escape_string($_GET['SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c']);
-                                    $query = $conn->query("SELECT *, a.type as sub, a.type as types FROM `upload_files` a LEFT JOIN `folder_content1` b ON a.LOGIN_ID = b.fol_id WHERE a.ADMIN_STATUS = 'Employee' AND a.LOGIN_ID = '$getID'") or die (mysqli_error($conn));
-                                  if($query->num_rows === 0) echo'<div class="alert alert-danger" role="alert">No Record Found!!!</div>';
-                                    while($file=$query->fetch_array()){
-                                       $id =  htmlentities($file['ID']);
-                                       $folder =  htmlentities($file['FOLDERSELECT']);
-                                       $name =  utf8_encode($file['NAME']);
-                                       $size =  htmlentities($file['SIZE']);
-                                       $uploads =  htmlentities($file['EMAIL']);
-                                       $status =  htmlentities($file['ADMIN_STATUS']);
-                                       $time =  htmlentities($file['TIMERS']);
-                                       $foldername =  htmlentities($file['VARIABLE']);
-                                       $targetFile = preg_replace('#[^\pL\pN./-]+#', '', $foldername);
-                                        $comment =  htmlentities(ucfirst($file['COMMENT']));
-                                       $type =  htmlentities($file['types']);
-                                       $loginid =  htmlentities($file['LOGIN_ID']);
-                                      
 
 
-                                       if($type == "file"){
-                                          $var =  '<img src="_Assets/img/docs-64.png" width="30px" height="25px" title="View File">'.$name.'';
-                                       }else{
-                                          $var =  '<a href="subfolder1.php?SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c='.$id.'"><img src="_Assets/img/floder-close-128.png" width="30px" height="25px" title="View File">&nbsp;'.substr($foldername,12).'</a> &nbsp;<i class="fas fa-file-medical sub_click" style="color:#007bff" title="Add new file" data-id="'.$id.'"></i> | <i class="fas fa-folder-plus sub_click2" style="color:#fb3" title="Add new subfolder" data-idx="'.$id.'"></i>';
-                                       }
+                <!---end step link-->
+                <hr>
 
-                                      if($type == "file"){
-                                          $var1 =  '<a href="download.php?f='.$foldername.''.$name.'"><img src="_Assets/img/file-document-download-128.png" width="30px" height="30px" title="View And Download File" download></a>';
-                                          // | <a href="remove.php?ID='.$id.'"><img src="_Assets/img/trash-128.png" width="30px" height="30px" title="Remove File"></a>
-                                       }else{
-                                          $var1 =  '';
-                                       }
-                                  
-                                    ?>
+                <table id="dtable" class="table table-striped" style="">
+                    <thead>
+                        <th>Folder Main</th>
+                        <th>Status</th>
+                        <th>Date Created</th>
 
-                                    <td width="30%">
-                                     <?php echo $var; ?>
-                                    </td>
-                                    <td><?php echo floor($size / 1000) . ' KB'; ?></td>
-                                    <td><?php echo $uploads; ?></td>
-                                    <td><?php echo $status; ?></td>
-                                    <td><?php echo $time; ?></td>
-                                    <td><?php echo $comment; ?></td>
-                                    <td width="15%">
-                                       <?php echo $var1; ?>
-                                    </td>
-                                </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
 
-                                <?php } ?>
-                            </tbody>
-                        </table>
-                        <!--end main file--->
-                    </div>
+                         <?php 
+   
+                           require_once("_Assets/include/connection.php");
 
-                </div>
+                            $query = $conn->query(" SELECT *  FROM folder_content1 order by fol_id DESC") or die (mysqli_error($conn));
+                            if($query->num_rows === 0) echo'<div class="alert alert-danger" role="alert">No Record Found!!!</div>';
+                            while($file=$query->fetch_array()){
+                               $idx =  htmlentities($file['fol_id']);
+                               $var1 =  htmlentities($file['file_path']);
+                               $stat =  htmlentities($file['emp_status']);
+                               $dates = htmlentities($file['date_created']);
+
+                            ?>
+
+                            <td width="30%"><img src="_Assets/img/folder-128.png" width="30px" height="30px" title="View File"><a href="subfolder.php?SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c=<?php echo  $idx; ?>"> <?php echo  substr($var1,12); ?></a>&nbsp;&nbsp;<i class="fas fa-folder-plus sub_click" style="color:green" title="Add new subfolder" data-id="<?php echo $idx ;?>"></i>
+
+                            </td>
+
+                            <td><?php echo $stat; ?></td>
+                           <td><?php echo date('M d, Y h:i A', strtotime(htmlentities($dates))) ?></td>
+                        </tr>
+
+                        <?php } ?>
+                    </tbody>
+                </table>
             </div>
 
-            <!---tabs-->
-
-            <!--end tabs-->
 
             </script>
             <div class="col-md-3" style="border-top: 4px solid #17a2b8;border-radius: 4px;  box-shadow: 0px 1px 1px 0px  #6c757d;"><br>
@@ -385,8 +349,7 @@ if(!isset($_SESSION["email_address"])){
                 </div>
             </div>
         </div>
-        <?php include 'modal/add_filesub.php';?>
-        <?php include 'modal/add_sub2.php';?>
+        <?php include 'modal/add_sub.php';?>
         <script>
             $(document).ready(function() {
 
@@ -397,29 +360,26 @@ if(!isset($_SESSION["email_address"])){
                 function load_data() {
                     $(document).on('click', '.sub_click', function(e) {
                         e.preventDefault();
-                        $('#add_file').modal('show');
-                        var ID = $(this).attr("data-id");
-                        getID(ID); //argument
-
+                        $('#Subfolder').modal('show');
+                        var fol_id = $(this).attr("data-id");
+                        getID(fol_id); //argument
 
                     });
                 }
 
-                function getID(ID) {
+                function getID(fol_id) {
                     $.ajax({
                         type: 'POST',
-                        url: 'sub_row.php',
+                        url: 'sub_row1.php',
                         data: {
-                            ID: ID
+                            fol_id: fol_id
                         },
                         dataType: 'json',
                         success: function(response) {
-                            $('#get_id').val(response.ID); //nagamit
-                            $('#folder_name').val(response.VARIABLE); //nagamit
-                            $('#f_name').val(response.EMAIL); //nagamit
-                            $('#log_name').val(response.LOGIN_ID); //nagamit
-                            $('#showx').html(response.VARIABLE); //nagamit
-
+                            $('#sub_ids').val(response.fol_id); //nagamit
+                            $('#folder_names').val(response.file_path); //nagamit
+                            $('#shows').html(response.file_path); //nagamit
+                            $('#fullnames').val(response.full_name); //nagamit
 
                         }
                     });
@@ -427,46 +387,6 @@ if(!isset($_SESSION["email_address"])){
 
             });
         </script>
-        <script>
-            $(document).ready(function() {
-
-                load_data();
-
-                var count = 1;
-
-                function load_data() {
-                    $(document).on('click', '.sub_click2', function(e) {
-                        e.preventDefault();
-                        $('#Subfolder2').modal('show');
-                        var ID = $(this).attr("data-idx");
-                        getID2(ID); //argument
-
-                    });
-                }
-
-                function getID2(ID) {
-                    $.ajax({
-                        type: 'POST',
-                        url: 'sub_row2.php',
-                        data: {
-                            ID: ID
-                        },
-                        dataType: 'json',
-                        success: function(response2) {
-                            $('#sub_id2').val(response2.ID); //nagamit
-                            $('#folder_name2').val(response2.VARIABLE); //nagamit
-                            $('#show').html(response2.VARIABLE); //nagamit
-                            $('#full_name').val(response2.EMAIL); //nagamit
-
-
-                            
-                        }
-                    });
-                }
-
-            });
-        </script>
-
         <script type="text/javascript" src="_Assets/js/jquery-3.4.0.min.js"></script>
         <script type="text/javascript" src="_Assets/js/popper.min.js"></script>
         <script type="text/javascript" src="_Assets/js/bootstrap.min.js"></script>

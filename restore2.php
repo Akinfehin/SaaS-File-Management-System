@@ -22,12 +22,12 @@
          $login =  htmlentities($fetch['LOGIN_ID']);
          $getID =  htmlentities($fetch['GET_ID']);
 
-         rename("../uploads/backup_files2/".htmlentities($fetch["NAME"]), $folder);
+         rename("../uploads1/backup_files2/".htmlentities($fetch["NAME"]), $folder);
      
          $conn->query("INSERT INTO `upload_files2`(ID, NAME, SIZE, DOWNLOAD, TIMERS, ADMIN_STATUS, EMAIL, FOLDERSELECT, VARIABLE, `TYPE`, LOGIN_ID, GET_ID) VALUES('$id', '$name', '$size', '$download', '$time', '$status', '$uploads', '$targetFile', '$foldername','$type','$login','$getID')") or die(mysqli_error($conn));
 
 		$conn->query("DELETE FROM `trash2` WHERE `ID` = '$ID'") or die(mysqli_error($conn));
-		echo "<script type='text/javascript'>alert('File Restore Again!');document.location='view_userfile.php'</script>";
+		echo "<script type='text/javascript'>alert('File Restore Again!');document.location='home.php'</script>";
 	}
 	
 ?>

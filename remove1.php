@@ -19,9 +19,9 @@
          $foldername =  htmlentities($fetch['VARIABLE']);   
          $type =  htmlentities($fetch['TYPE']); 
          $login =  htmlentities($fetch['LOGIN_ID']);
-         $getID =  htmlentities($fetch['GET_ID']);      
+         $getID =  htmlentities($fetch['GET_ID']);		
 
-          $destination = "../uploads/backup_files1/".htmlentities($fetch["NAME"]);
+          $destination = "../uploads1/backup_files1/".htmlentities($fetch["NAME"]);
           rename($folder, $destination);
 
 	    $conn->query("INSERT INTO `trash1` VALUES('$id', '$name', '$size', '$download', '$time', '$status', '$uploads', '$targetFile', '$foldername','$type', '$login','$getID')") or die(mysqli_error());

@@ -2,7 +2,7 @@
 	require_once("_Assets/include/connection.php");
 	if(isset($_POST['fol_id'])){
 		$id = $conn->real_escape_string(strip_tags($_POST['fol_id']));
-		$sql = "SELECT * FROM `folder_content` WHERE fol_id = '$id'"; 
+		$sql = "SELECT * FROM `folder_content1` WHERE fol_id = '$id'"; 
 
 		$query = $conn->query($sql);
 		$row = $query->fetch_assoc();

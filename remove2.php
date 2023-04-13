@@ -21,7 +21,7 @@
          $login =  htmlentities($fetch['LOGIN_ID']);
          $getID =  htmlentities($fetch['GET_ID']);      
 
-          $destination = "../uploads/backup_files2/".htmlentities($fetch["NAME"]);
+          $destination = "../uploads1/backup_files2/".htmlentities($fetch["NAME"]);
           rename($folder, $destination);
 
 

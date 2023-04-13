@@ -3,11 +3,10 @@
 <?php
 
 session_start();
- require_once("_Assets/include/connection.php");
-if (!isset($_SESSION['admin_user'])) {
- header('Location: index.php');
-}
+if(!isset($_SESSION["email_address"])){
+    header("location:../login.html");
 
+} 
 ?>
 <head>
   <meta charset="utf-8">
@@ -17,23 +16,22 @@ if (!isset($_SESSION['admin_user'])) {
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
   <link href="_Assets/css/bootstrap.min.css" rel="stylesheet">
   <link href="_Assets/css/mdb.min.css" rel="stylesheet">
-  <link href="_Assets/css/style.min.css" rel="stylesheet">
+  <link href="_Assets/css/style.css" rel="stylesheet">
 
     <script src="_Assets/js/jquery-1.8.3.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="_Assets/medias/css/dataTable.css" />
-    <script src="_Assets/medias/js/jquery.dataTables.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="media/css/dataTable.css" />
+    <script src="_Assets/media/js/jquery.dataTables.js" type="text/javascript"></script>
     <script type="text/javascript" charset="utf-8">
   $(document).ready(function(){
-      $.fn.dataTable.ext.errMode = 'none';
+    $.fn.dataTable.ext.errMode = 'none';
       $('#dtable').dataTable({
                 "aLengthMenu": [[5, 10, 15, 25, 50, 100 , -1], [5, 10, 15, 25, 50, 100, "All"]],
                 "iDisplayLength": 10
             });
-       })
+  })
     </script>
-
-  <style>
-          select[multiple], select[size] {
+    <style type="text/css">
+      select[multiple], select[size] {
     height: auto;
     width: 20px;
 }
@@ -41,21 +39,25 @@ if (!isset($_SESSION['admin_user'])) {
     float: right;
     margin: 2px !important;
 }
-
-    .map-container{
+input[type=file] {
+    border: 2px dotted #999;
+    border-radius: 10px;
+    margin-left: 9px;
+    width: 231px!important;
+}  
+  .map-container{
 overflow:hidden;
 padding-bottom:56.25%;
 position:relative;
 height:0;
 }
-.map-container iframe{
-left:0;
-top:0;
-height:100%;
-width:100%;
-position:absolute;
+
+.md-form .form-control:disabled, .md-form .form-control[readonly] {
+    border-bottom: 1px solid #bdbdbd;
+    background-color: transparent;
+    width: 215px !important;
 }
-#loader{
+     #loader{
         position: fixed;
         left: 0px;
         top: 0px;
@@ -72,213 +74,88 @@ position:absolute;
   $(window).on('load', function(){
     setTimeout(function(){
           $('#loader').fadeOut('slow');  
-      }); 
+      });
   });
 </script>
+
 </head>
 
-<body class="grey lighten-3">
-  <header>
-    <nav class="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar">
-      <div class="container-fluid">
-        <a class="navbar-brand waves-effect" href="#">
-          <strong class="blue-text"></strong>
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto">
-          </ul>
-            <?php 
+<body style="padding:0px; margin:0px; background-color:#fff;font-family:arial,helvetica,sans-serif,verdana,'Open Sans'">
+  <?php 
 
-               require_once("_Assets/include/connection.php");
+     require_once("_Assets/include/connection.php");
 
-               $id = $conn->real_escape_string($_SESSION['admin_user']);
+     $id = $conn->real_escape_string($_SESSION['email_address']);
 
-               $r = $conn->query("SELECT * FROM admin_login where id = '$id'") or die (mysqli_error($con));
 
-              $row = $r->fetch_array();
+      $r = $conn->query("SELECT * FROM login_user where id = '$id'") or die (mysqli_error($con));
 
-               $id=htmlentities($row['admin_user']);
-               $name=htmlentities($row['name']);
+      $row = $r->fetch_array();
 
-            ?>
 
-          <ul class="navbar-nav nav-flex-icons">
-          <li style="margin-top: 10px;">Welcome!,</font> <?php echo ucwords(htmlentities($id)); ?></li>
-            <li class="nav-item">
-              <a href="#" class="nav-link waves-effect" target="_blank">
-                <i class="fab fa-facebook-f"></i>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link waves-effect" target="_blank">
-                <i class="fab fa-twitter"></i>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="logout.php" class="nav-link border border-light rounded waves-effect">
-               <i class="far fa-user-circle"></i>SignOut
-              </a>
-            </li>
-          </ul>
+   $id=htmlentities($row['email_address']);
+   $user_status=htmlentities($row['user_status']);
+   $name=htmlentities($row['name']);
+    $folid=htmlentities($row['fol_id']);
+
+?>
+
+<nav class="mb-1 navbar navbar-expand-lg navbar-dark default-color fixed-top">
+    <a class="navbar-brand" href="home.php"><img src="_Assets/js/img/Files_Download.png" width="33px" height="33px"> <font color="#F0B56F">F</font>ile <font color="#F0B56F">M</font>anagement <font color="#F0B56F">S</font>ystem</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-4"
+    aria-controls="navbarSupportedContent-4" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent-4">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-4" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+           <font color="black">Welcome!,</font> <?php echo ucwords(htmlentities($id)); ?> <i class="fas fa-user-circle"></i> Login </a>
+          <div class="dropdown-menu dropdown-menu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
+           <a class="dropdown-item" href="history_log.php"> <i class="fas fa-chalkboard-teacher"></i> User Logged</a>
+           <a class="dropdown-item" href="change_password.php"> <i class="fas fa-cog"></i> Change Password</a>
+          <a class="dropdown-item" href="Logout.php"><i class="fas fa-sign-in-alt"></i> LogOut</a>
         </div>
-      </div>
-    </nav>
-    <div class="sidebar-fixed position-fixed">
-      <a class="logo-wrapper waves-effect">   
-      <img src="img/images.jpg" width="150px" height="200px;" class="img-fluid" alt="">
-      </a>
-       <div class="list-group list-group-flush">
-        <a href="dashboard.php" class="list-group-item active waves-effect">
-          <i class="fas fa-chart-pie mr-3"></i>Dashboard
-        </a>
-         <a href="#" class="list-group-item list-group-item-action waves-effect"  data-toggle="modal" data-target="#modalRegisterForm">
-          <i class="fas fa-user mr-3"></i>Add Admin</a>
-            <a href="view_admin.php" class="list-group-item list-group-item-action waves-effect">
-          <i class="fas fa-users"></i> View Admin</a>
-<!--         <a href="#" class="list-group-item list-group-item-action waves-effect" data-toggle="modal" data-target="#modalRegisterForm2">
-          <i class="fas fa-user mr-3"></i>Add User</a> -->
-           <a href="view_user.php" class="list-group-item list-group-item-action waves-effect">
-          <i class="fas fa-users"></i>  View User</a>
-           <a href="add_folder.php" class="list-group-item list-group-item-action waves-effect">
-         <i class="fas fa-folder-plus"></i> Add Admin Folder</a>
-        <a href="add_document.php" class="list-group-item list-group-item-action waves-effect">
-          <i class="fas fa-file-medical"></i> Add Admin File</a>
-        <a href="view_userfile.php" class="list-group-item list-group-item-action waves-effect">
-          <i class="fas fa-folder-open"></i> View User File</a>
-            <a href="admin_log.php" class="list-group-item list-group-item-action waves-effect">
-          <i class="fas fa-chalkboard-teacher"></i> Admin logged</a>
-              <a href="user_log.php" class="list-group-item list-group-item-action waves-effect">
-          <i class="fas fa-chalkboard-teacher"></i> User logged</a>
-      </div>
-    </div>
-   <div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-  aria-hidden="true">
-  <form action="create_Admin.php" method="POST">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold"><i class="fas fa-user-plus"></i> Add Admin</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <i class="fas fa-user prefix grey-text"></i>
-          <input type="text" id="orangeForm-name" name="name" class="form-control validate" required="">
-          <label data-error="wrong" data-success="right" for="orangeForm-name">Your name</label>
-        </div>
-        <div class="md-form mb-5">
-          <i class="fas fa-envelope prefix grey-text"></i>
-          <input type="email" id="orangeForm-email" name="admin_user" class="form-control validate" required="">
-          <label data-error="wrong" data-success="right" for="orangeForm-email">Your email</label>
-        </div>
-
-        <div class="md-form mb-4">
-          <i class="fas fa-lock prefix grey-text"></i>
-          <input type="password" id="orangeForm-pass" name="admin_password" class="form-control validate" required="">
-          <label data-error="wrong" data-success="right" for="orangeForm-pass">Your password</label>
-        </div>
-         <div class="md-form mb-5">
-          <input type="hidden" id="orangeForm-name" name="admin_status" value = "Admin" class="form-control validate">
-        </div>
-      </div>
-      <div class="modal-footer d-flex justify-content-center">
-        <button class="btn btn-info" name="reg">Sign up</button>
-      </div>
-    </div>
+      </li>
+    </ul>
   </div>
-</div>
-</form>
- <div class="modal fade" id="modalRegisterForm2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-  aria-hidden="true">
-  <form action="create_user.php" method="POST" enctype="multipart/form-data">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold"><i class="fas fa-user-plus"></i> Add User Employee</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-0">
-     <div class="md-form mb-0">
-       <img src="_Assets/img/Men-Profile-Image.png" width="200" height="150">
-      </div>
-       <div class="md-form mb-5">
-          <i class="fas fa-user prefix grey-text"></i>
-          <input type="file" id="orangeForm-name" name="user_profile" class="form-control validate" >
-        </div>
-        <div class="md-form mb-5">
-
-      </div>
-        <div class="md-form mb-5">
-          <i class="fas fa-user prefix grey-text"></i>
-          <input type="text" id="orangeForm-name" name="name" class="form-control validate">
-          <label data-error="wrong" data-success="right" for="orangeForm-name">Your name</label>
-        </div>
-         <div class="md-form mb-5">
-          <i class="fas fa-user prefix grey-text"></i>
-          <input type="text" id="orangeForm-name" name="user_position" class="form-control validate">
-          <label data-error="wrong" data-success="right" for="orangeForm-name">Position</label>
-        </div>
-          <div class="md-form mb-5">
-          <i class="fas fa-user prefix grey-text"></i>
-          <input type="text" id="orangeForm-name" name="user_contact" class="form-control validate">
-          <label data-error="wrong" data-success="right" for="orangeForm-name">contact</label>
-        </div>
-         <div class="md-form mb-5">
-          <i class="fas fa-user prefix grey-text"></i>
-          <input type="text" id="orangeForm-name" name="user_address" class="form-control validate">
-          <label data-error="wrong" data-success="right" for="orangeForm-name">Address</label>
-        </div>
-        <div class="md-form mb-5">
-          <i class="fas fa-envelope prefix grey-text"></i>
-          <input type="email" id="orangeForm-email" name="email_address" class="form-control validate" required="">
-          <label data-error="wrong" data-success="right" for="orangeForm-email">Your email</label>
-        </div>
-        <div class="md-form mb-4">
-          <i class="fas fa-lock prefix grey-text"></i>
-          <input type="password" id="orangeForm-pass" name="user_password" class="form-control validate" required="">
-          <label data-error="wrong" data-success="right" for="orangeForm-pass">Your password</label>
-        </div>
-         <div class="md-form mb-4">
-          <i class="fas fa-user prefix grey-text"></i>
-          <input type="text" id="orangeForm-pass" name="user_status" value = "Employee" class="form-control validate" readonly="">
-          <label data-error="wrong" data-success="right" for="orangeForm-pass">User Status</label>
-        </div>
-      </div>
-      <div class="modal-footer d-flex justify-content-center">
-        <button class="btn btn-info" name="reguser">Sign up</button>
-      </div>
-    </div>
-  </div>
-</div>
-</form>
-</header>
- <div id="loader"></div>
+</nav>
+<br>
+<br>
   <main class="pt-5 mx-lg-5">
-    <div class="container-fluid mt-5">
+    <div class="container">
       <div class="card mb-4 wow fadeIn">
         <div class="card-body d-sm-flex justify-content-between">
           <h4 class="mb-2 mb-sm-0 pt-1">
-            <a href="dashboard.php">Home Page</a>
-            <span>/</span>
-            <span>Dashboard</span>
-          </h4>
+           <div class="d-flex justify-content-center pull-right">     
+            <a href="home.php">
+            <button class="btn btn-info"><i class="far fa-file-image"></i>  View File</button></a>
+            <a href="add_file.php"><button type="button" class="btn btn-success"><i class="fas fa-file-medical"></i>  Add File</button></a>
         </div>
       </div>
-     <div class="">
-    <div class="container">
-  <hr></hr>
-<div class="row">
-<div class="col-md-4">
-<div class="card">
-  <div class="card-body">
+      <hr>
+    <div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Add File Form</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-2">
+      </div>  
+    </div>
+  </div>
+</div>
+<div id="loader"></div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-4">
+   <div class="card">
+    <div class="card-body">
         <form action="create_folder.php" method="post" enctype="multipart/form-data" >
            <label for="subject" class="">Folder form</label><hr style="background-color:green"></hr>
           <input type="text" name="name" class="form-control" placeholder="create folder name" required="" >
@@ -287,39 +164,40 @@ position:absolute;
         </form>
   </div>
 </div>
- </div>
-<div class="col-md-8">
-<table id="dtable" class = "table table-striped">
- <thead>
+  </div>
+    <div class="col-md-8">
+    <table id="dtable" class = "table table-striped">
+     <thead>
     <th>Foldername</th>
     <th>Action</th>
 </thead>
-<tbody>   
+<tbody> 
     <tr>
-      <?php 
+        <?php 
    
-       require_once("_Assets/include/connection.php");
+        require_once("_Assets/include/connection.php");
 
-      $query = $conn->query("SELECT DISTINCT fol_id,file_path FROM  folder_content group by file_path DESC") or die (mysqli_error($conn));
-        if($query->num_rows === 0) echo'<div class="alert alert-danger" role="alert">No Record Found!!!</div>';
-         while($file=$query->fetch_array()){
+       $query = $conn->query("SELECT DISTINCT fol_id,file_path FROM  folder_content1 group by file_path DESC") or die (mysqli_error($conn));
+      if($query->num_rows === 0) echo'<div class="alert alert-danger" role="alert">No Record Found!!!</div>';
+      while($file=$query->fetch_array()){
          $id =  htmlentities($file['fol_id']);
          $name =  htmlentities($file['file_path']);
     
       ?>
-         <td width="70%"><img src="_Assets/img/folder-128.png" width="30px" height="30px" title="View File"> &nbsp;<?php echo  $name; ?></td>
+          <td width="70%"><img src="_Assets/img/floder-close-128.png" width="30px" height="25px" title="View File"> &nbsp;<?php echo  $name; ?></td>
            <td><a href='delete_foldername.php?fol_id=<?php echo $id; ?>'><img src="_Assets/img/-_Trash-Can-Delete-Remove--128.png" width="30px" height="30px" title="Delete Foldername"></a></td>
     </tr>
 <?php } ?>
 </tbody>
 </table>
- </div>
-</div>
-    <hr></div>
-    <div class="footer-copyright py-3">
-     <p>All right Reserved &copy; <?php echo date('Y');?> Created By:Fehintoluwa Akinsinde</p>
-    </div>
   </div>
+</div>
+<Br>
+</div></div>
+ </center>
+  <div class="footer-copyright py-3">
+       <p>All right Reserved &copy; <?php echo date('Y');?> Created By:Fehintoluwa Akinisinde</p>
+    </div>
   </footer>
   <script type="text/javascript" src="_Assets/js/jquery-3.4.0.min.js"></script>
   <script type="text/javascript" src="_Assets/js/popper.min.js"></script>
@@ -331,11 +209,51 @@ position:absolute;
 <link rel="stylesheet" type="text/css" href="_Assets/css/dataTables.responsive.css">
 <script type="text/javascript" language="javascript" src="_Assets/js/dataTables.responsive.js"></script>
 
+
 </body>
 
 </html>
 <script type="text/javascript">
-             var IDLE_TIMEOUT = 1200;
+   $("#Alert").on("click", function () {
+          
+          uservalidate();
+          userfile();
+   
+         if (uservalidate() === true && userfile() === true) {
+   
+         };  
+   
+   });
+   
+   function uservalidate() {
+   if ($('#categ').val() == '') { 
+       $('#categ').css('border-color', '#dc3545');
+    return false;
+     } else {
+      $('#categ').css('border-color', '#dc3545'); 
+       return true;
+   }
+   
+   };
+
+      function userfile() {
+   if ($('#file').val() == '') { 
+       $('#file').css('border-color', '#dc3545');
+    return false;
+     } else {
+      $('#file').css('border-color', '#dc3545'); 
+       return true;
+   }
+   
+   };
+   
+
+   
+   
+</script>
+
+<script type="text/javascript">
+             var IDLE_TIMEOUT = 1200; //will expire after twenty minutes
                 var _idleSecondsCounter = 0;
                 document.onclick = function() {
                 _idleSecondsCounter = 0;
@@ -353,8 +271,8 @@ position:absolute;
                 var oPanel = document.getElementById("SecondsUntilExpire");
                 if (oPanel)
                 oPanel.innerHTML = (IDLE_TIMEOUT - _idleSecondsCounter) + "";
-                if (_idleSecondsCounter >= IDLE_TIMEOUT) {      
+                if (_idleSecondsCounter >= IDLE_TIMEOUT) {
                 document.location.href = "logout.php";
                 }
-              }
+                }
         </script>

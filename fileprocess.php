@@ -1,4 +1,5 @@
 <?php
+header('Content-type: text/html; charset=UTF-8');
 // connect to the database
 require_once("_Assets/include/connection.php");
 
@@ -6,11 +7,11 @@ require_once("_Assets/include/connection.php");
 if (isset($_POST['save'])) { // if save button on the form is clicked
     // name of the uploaded file
   $user = $conn->real_escape_string($_POST['email']);
-   $loginid = $conn->real_escape_string($_POST['login_id']);
+  $loginid = $conn->real_escape_string($_POST['login_id']);
 
-     $filename = utf8_encode(htmlspecialchars($_FILES['myfile']['name'],ENT_QUOTES));
+   //$filename = $conn->utf8_encode($_FILES['myfile']['name']);
+   $filename = utf8_encode(htmlspecialchars($_FILES['myfile']['name'],ENT_QUOTES));
   //  $folderselect = $_POST['folderselect'];
-
 
   if ($_POST['variable'] == '')
     {
@@ -20,8 +21,7 @@ if (isset($_POST['save'])) { // if save button on the form is clicked
     {
       $variable = $conn->real_escape_string($_POST['variable']);
     }
-    $destination = "../uploads/$variable".$filename; 
-
+    $destination = "../uploads1/$variable".$filename; 
     $extension = pathinfo($filename, PATHINFO_EXTENSION);
 
     // the physical file on a temporary uploads directory on the server
@@ -40,20 +40,22 @@ if (isset($_POST['save'])) { // if save button on the form is clicked
     } else{
 
 
-  $query=$conn->query("SELECT * FROM `upload_adminfiles` WHERE `name` = '$filename'")or die(mysqli_error($conn));
-           $counter=$query->num_rows;
+  $query=$conn->query("SELECT * FROM `upload_files` WHERE `name` = '$filename'")or die(mysqli_error($conn));
+           $counter = $query->num_rows;
             
             if ($counter == 1) 
               { 
                    echo '
                 <script type = "text/javascript">
                     alert("Files already taken");
-                    window.location = "add_document.php";
+                    window.location = "home.php";
                 </script>
 
 
                ';
               } 
+
+
       
         date_default_timezone_set("asia/manila");
          $time = date("M-d-Y h:i A",strtotime("+0 HOURS"));
@@ -61,12 +63,12 @@ if (isset($_POST['save'])) { // if save button on the form is clicked
         // move the uploaded (temporary) file to the specified destination
         if (move_uploaded_file($file, $destination)) {
            $file = "file";
-            $sql = "INSERT INTO upload_adminfiles (name, size, download, timers, admin_status, email, folderselect, variable, type, login_id) VALUES ('$filename', $size, 0, '$time', 'Admin', '$user','$destination','$variable',  '$file', '$loginid')";
+            $sql = "INSERT INTO upload_files (name, size, download, timers, admin_status, email, folderselect, variable, type, login_id) VALUES ('$filename', $size, 0, '$time', 'Employee', '$user','$destination', '$variable', '$file', '$loginid')";
             if ($conn->query($sql)) {
                    echo '
                      <script type = "text/javascript">
-                    alert("File Upload");
-                    window.location = "add_document.php";
+                    alert("File Upload Successfully!");
+                    window.location = "home.php";
                 </script>';
 
             }

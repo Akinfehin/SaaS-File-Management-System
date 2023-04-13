@@ -5,7 +5,7 @@ require_once("_Assets/include/connection.php");
  if(ISSET($_POST)){
 
    $target_file = htmlspecialchars($_FILES["file_name"]["name"],ENT_QUOTES);
-   $fullname = $conn->real_escape_string($_POST["full_name"]);
+   $fullname = $ID = $conn->real_escape_string($_POST["full_name"]);
    $subfolder_path = $conn->real_escape_string($_POST['folder_name']);
 
     $image = addslashes(file_get_contents($_FILES['file_name']['tmp_name']));
@@ -20,10 +20,10 @@ require_once("_Assets/include/connection.php");
 
     date_default_timezone_set("asia/manila");
     $timestamp =  date('Y-m-d H:i:s', strtotime("+0 HOURS"));
-    $Emp = "Admin";
+    $Emp = "Employee";
     $download = 0;
 
-   $q_checkadmin = $conn->query("SELECT * FROM `upload_adminfiles2` WHERE NAME = '$target_file'") or die(mysqli_error());
+   $q_checkadmin = $conn->query("SELECT * FROM `upload_files2` WHERE NAME = '$target_file'") or die(mysqli_error());
     $v_checkadmin = $q_checkadmin->num_rows;
     if($v_checkadmin === 1){
        echo '<div class="alert alert-warning alert-dismissible fade show" role="alert" id="warning-alerts">
@@ -35,7 +35,7 @@ require_once("_Assets/include/connection.php");
     }  else{
 
 $file = "sub_file2";
-  $stmt = $conn->query("INSERT INTO upload_adminfiles2(NAME, SIZE, DOWNLOAD, TIMERS, ADMIN_STATUS, EMAIL, VARIABLE, TYPE, LOGIN_ID, GET_ID) VALUES('$target_file', '$size', '$download', '$timestamp', '$Emp', '$fullname', '$subfolder_path', '$file', 'sub_$login_id','$login_id')");
+  $stmt = $conn->query("INSERT INTO upload_files2(NAME, SIZE, DOWNLOAD, TIMERS, ADMIN_STATUS, EMAIL, VARIABLE, TYPE, LOGIN_ID, GET_ID) VALUES('$target_file', '$size', '$download', '$timestamp', '$Emp', '$fullname', '$subfolder_path', '$file', 'sub_$login_id','$login_id')");
 
   if($stmt == TRUE){
 

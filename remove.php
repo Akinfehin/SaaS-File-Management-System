@@ -1,5 +1,5 @@
 <?php
-		error_reporting(0);
+	
 	 require_once("_Assets/include/connection.php");
 	
 	if(ISSET($_REQUEST['ID'])){
@@ -7,7 +7,7 @@
 		$query = $conn->query("SELECT * FROM `upload_files` WHERE `ID` = '$ID'") or die(mysqli_error());
 		$fetch = $query->fetch_array();
 
-	     $id =  htmlentities($fetch['ID']);
+		 $id =  htmlentities($fetch['ID']);
          $name =  utf8_encode($fetch['NAME']);
          $size =  htmlentities($fetch['SIZE']);
          $download =  htmlentities($fetch['DOWNLOAD']);
@@ -20,7 +20,7 @@
          $type =  htmlentities($fetch['TYPE']);	
          $login =  htmlentities($fetch['LOGIN_ID']);	
 
-          $destination = "../uploads/backup_files/".htmlentities($fetch["NAME"]);
+          $destination = "../uploads1/backup_files/".htmlentities($fetch["NAME"]);
           rename($folder, $destination);
 
 	    $conn->query("INSERT INTO `trash` VALUES('$id', '$name', '$size', '$download', '$time', '$status', '$uploads', '$targetFile', '$foldername','$type', '$login')") or die(mysqli_error());

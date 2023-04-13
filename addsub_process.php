@@ -1,11 +1,11 @@
 <?php
 
-     require_once("_Assets/include/connection.php");
+    require_once("_Assets/include/connection.php");
 
     $folder_name = $conn->real_escape_string($_POST["folder_name"]);
     $dirname = $conn->real_escape_string($_POST["sub_name"]);
      $filename = "/{$dirname}/"; 
-     $destination = "../uploads".substr($folder_name,10).''.$filename;    
+     $destination = "../uploads1".substr($folder_name,11).''.$filename;    
    
     if (file_exists($destination)) { 
 
@@ -17,15 +17,15 @@
 
       $ID = $conn->real_escape_string($_POST['LOGIN_ID']);
       $folder = "folder";
-      $status = "Admin";
+      $status = "Employee";
       $size = 0;
       $download = 0;
       $name = $conn->real_escape_string($_POST["full_name"]);
       date_default_timezone_set("asia/manila");
       $time = date("M-d-Y h:i A",strtotime("+0 HOURS"));
 
-      $emp = "Admin";
-       $sql = $conn->query("INSERT INTO `upload_adminfiles`(`NAME`, `SIZE`, `DOWNLOAD`, `TIMERS`, `ADMIN_STATUS`, `EMAIL`, `VARIABLE`,  `type`,  `LOGIN_ID`)  VALUES ('$folder_name', '$size', '$download', '$time',  '$status', '$name', '$destination',  '$folder', '$ID')")  or die (mysqli_error($conn));
+      $emp = "Employee";
+       $sql = $conn->query("INSERT INTO `upload_files`(`NAME`, `SIZE`, `DOWNLOAD`, `TIMERS`, `ADMIN_STATUS`, `EMAIL`, `VARIABLE`,  `type`,  `LOGIN_ID`)  VALUES ('$folder_name', '$size', '$download', '$time',  '$status', '$name', '$destination',  '$folder', '$ID')")  or die (mysqli_error($conn));
 
 
       if ($sql == TRUE) {

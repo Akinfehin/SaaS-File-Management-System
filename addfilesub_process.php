@@ -1,4 +1,5 @@
 
+
 <?php
 error_reporting(0);
 require_once("_Assets/include/connection.php");
@@ -21,10 +22,10 @@ require_once("_Assets/include/connection.php");
 
     date_default_timezone_set("asia/manila");
     $timestamp =  date('Y-m-d H:i:s', strtotime("+0 HOURS"));
-    $Emp = "Admin";
+    $Emp = "Employee";
     $download = 0;
 
-   $q_checkadmin = $conn->query("SELECT * FROM `upload_adminfiles1` WHERE `NAME` = '$target_file'") or die(mysqli_error($conn));
+   $q_checkadmin = $conn->query("SELECT * FROM `upload_files1` WHERE `NAME` = '$target_file'") or die(mysqli_error($conn));
     $v_checkadmin = $q_checkadmin->num_rows;
     if($v_checkadmin === 1){
        echo '<div class="alert alert-warning alert-dismissible fade show" role="alert" id="warning-alerts">
@@ -35,7 +36,7 @@ require_once("_Assets/include/connection.php");
          </div>';
     }  else{
   $file = "sub_file1";
-  $stmt = $conn->query("INSERT INTO upload_adminfiles1(NAME, SIZE, DOWNLOAD, TIMERS, ADMIN_STATUS, EMAIL, VARIABLE, TYPE, LOGIN_ID, GET_ID) VALUES('$target_file', '$size', '$download', '$timestamp', '$Emp', '$fullname', '$subfolder_path', '$file', 'sub_$login_id','$login_id')") or die(mysqli_error($conn));
+  $stmt = $conn->query("INSERT INTO upload_files1(NAME, SIZE, DOWNLOAD, TIMERS, ADMIN_STATUS, EMAIL, VARIABLE, TYPE, LOGIN_ID, GET_ID) VALUES('$target_file', '$size', '$download', '$timestamp', '$Emp', '$fullname', '$subfolder_path', '$file', 'sub_$login_id','$login_id')") or die(mysqli_error($conn));
 
   if($stmt == TRUE){
 

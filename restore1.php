@@ -7,7 +7,7 @@
 		$ID = $conn->real_escape_string($_REQUEST['ID']);
 		$query=$conn->query("SELECT * FROM `trash1` WHERE `ID` = '$ID'") or die(mysqli_error());
 		$fetch=$query->fetch_array();
-
+      
          $id =  htmlentities($fetch['ID']);
          $name =  utf8_encode($fetch['NAME']);
          $size =  htmlentities($fetch['SIZE']);
@@ -17,18 +17,17 @@
          $uploads =  htmlentities($fetch['EMAIL']);
          $folder =  htmlentities($fetch['FOLDERSELECT']);
          $targetFile = preg_replace('#[^\pL\pN./-]+#', '', $folder);
-         $foldername =  htmlentities($fetch['VARIABLE']);   
+         $foldername =  htmlentities($fetch['VARIABLE']);
          $type =  htmlentities($fetch['TYPE']); 
          $login =  htmlentities($fetch['LOGIN_ID']);
-         $getID =  htmlentities($fetch['GET_ID']);    
+         $getID =  htmlentities($fetch['GET_ID']);
 
-          $destination = "../uploads/backup_files1/".htmlentities($fetch["NAME"]);
-          rename($folder, $destination);
+         rename("../uploads1/backup_files1/".htmlentities($fetch["NAME"]), $folder);
      
          $conn->query("INSERT INTO `upload_files1`(ID, NAME, SIZE, DOWNLOAD, TIMERS, ADMIN_STATUS, EMAIL, FOLDERSELECT, VARIABLE, `TYPE`, LOGIN_ID, GET_ID) VALUES('$id', '$name', '$size', '$download', '$time', '$status', '$uploads', '$targetFile', '$foldername','$type','$login','$getID')") or die(mysqli_error($conn));
 
 		$conn->query("DELETE FROM `trash1` WHERE `ID` = '$ID'") or die(mysqli_error($conn));
-		echo "<script type='text/javascript'>alert('File Restore Again!');document.location='view_userfile.php'</script>";
+		echo "<script type='text/javascript'>alert('File Restore Again!');document.location='home.php'</script>";
 	}
 	
 ?>
